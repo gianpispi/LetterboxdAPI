@@ -2,6 +2,10 @@
 
 ## Required
 - Swift 5.3
+- iOS 13
+- tvOS 13
+- watchOS 6
+- macOS 10.15
 
 
 ## Installation
