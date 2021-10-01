@@ -1,11 +1,10 @@
-    import XCTest
-    @testable import LetterboxdAPI
+import XCTest
+@testable import LetterboxdAPI
 
-    final class LetterboxdAPITests: XCTestCase {
-        func testExample() {
-            // This is an example of a functional test case.
-            // Use XCTAssert and related functions to verify your tests produce the correct
-            // results.
-            XCTAssertEqual(LetterboxdAPI().text, "Hello, World!")
-        }
+final class LetterboxdAPITests: XCTestCase {
+    func testAPIKeysSetup() {
+        LetterboxdAPI.setUpAPIKeys(publicAPI: "test", privateAPI: "test")
+        XCTAssertNotEqual(Private.privateAPIKey, "")
+        XCTAssertNotEqual(Private.publicAPIKey, "")
     }
+}
