@@ -62,6 +62,38 @@ LetterboxdAPI.shared.getLID(for: url) { result in
 }
 ```
 
+### Get a film providing the film ID
+Just provide the film id, and get the response right away.
+``` swift
+LetterboxdAPI.shared.getFilm(withId: "id") { result in
+    switch result {
+    case .success(let film):
+        // film is of type Film
+        print(film.originalName)
+        
+    case .failure(let error):
+        // error may be of type LetterboxdAPIError
+        print(error)
+    }
+}
+```
+
+### Get a film providing the film ID
+Just provide the film id, and get the response right away.
+``` swift
+LetterboxdAPI.shared.getFilmAvailability(withId: "id") { result in
+    switch result {
+    case .success(let availability):
+        // availability is of type FilmAvailabilityResponse
+        print(film.items.displayName)
+        
+    case .failure(let error):
+        // error may be of type LetterboxdAPIError
+        print(error)
+    }
+}
+```
+
 ## Contributing
 
 - If you need help or you'd like to ask a general question, open an issue.
