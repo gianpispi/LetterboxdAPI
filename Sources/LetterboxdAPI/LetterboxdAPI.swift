@@ -45,7 +45,7 @@ public class LetterboxdAPI {
         task.resume()
     }
     
-    private func generateRequest(url: URL, method: HTTPMethod) -> URLRequest? {
+    internal func generateRequest(url: URL, method: HTTPMethod) -> URLRequest? {
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -53,7 +53,7 @@ public class LetterboxdAPI {
     }
     
     @discardableResult
-    private func processRequest<R: Decodable>(request: URLRequest, completion: @escaping (Result<R, Error>) -> Void) -> URLSessionTask {
+    internal func processRequest<R: Decodable>(request: URLRequest, completion: @escaping (Result<R, Error>) -> Void) -> URLSessionTask {
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard error == nil, let data = data else {
                 completion(.failure(error!))
