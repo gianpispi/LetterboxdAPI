@@ -85,7 +85,51 @@ LetterboxdAPI.shared.getFilmAvailability(withId: "id") { result in
     switch result {
     case .success(let availability):
         // availability is of type FilmAvailabilityResponse
-        print(film.items.displayName)
+        print(film.items.map({ $0.displayName }))
+        
+    case .failure(let error):
+        // error may be of type LetterboxdAPIError
+        print(error)
+    }
+}
+```
+
+### Get a member providing the member's ID
+``` swift
+LetterboxdAPI.shared.getMember(withId: "id") { result in
+    switch result {
+    case .success(let member):
+        // member is of type Member
+        print(member.username)
+        
+    case .failure(let error):
+        // error may be of type LetterboxdAPIError
+        print(error)
+    }
+}
+```
+
+### Get a member's statistics providing the member's ID
+``` swift
+LetterboxdAPI.shared.getMemberStatistics(withId: "id") { result in
+    switch result {
+    case .success(let statistics):
+        // statistics is of type MemberStatistics
+        print(statistics.counts.watches)
+        
+    case .failure(let error):
+        // error may be of type LetterboxdAPIError
+        print(error)
+    }
+}
+```
+### Get a member's watchlist providing the member's ID
+``` swift
+LetterboxdAPI.shared.getMemberWatchlist(withId: "id") { result in
+    switch result {
+    case .success(let watchlist):
+        // watchlist is of type FilmResponse
+        print(watchlist.items.map({ $0.name }))
         
     case .failure(let error):
         // error may be of type LetterboxdAPIError
