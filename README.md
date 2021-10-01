@@ -27,6 +27,7 @@ let package = Package(name: "YourPackage",
 ```
 You must then use import SwiftLocation to use the core features.
 
+
 ## Usage
 ``` swift
 import LetterboxdAPI
@@ -38,6 +39,22 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
     LetterboxdAPI.setUpAPIKeys(publicAPI: "<<API Key>>", privateAPI: "<<API Secret>>")
     
     return true
+}
+```
+
+### Get the LID (Letterboxd ID) and type for a Letterboxd URL (eg: boxd.it/<<ID>> or letterboxd.com/<<something>>)
+``` swift
+let url = URL(string: "https://letterboxd.com/film/free-guy/")!
+LetterboxdAPI.shared.getLID(for: url) { result in
+    switch result {
+    case .success(let obj):
+        // obj of type LetterboxdObject, which has the object LID and the  object type (LetterboxdType)
+        print(obj.lid)
+        
+    case .failure(let error):
+        // error is of type LetterboxdAPIError and is `wrongResponse`
+        print(error)
+    }
 }
 ```
 
