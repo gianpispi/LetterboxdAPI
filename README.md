@@ -138,6 +138,26 @@ LetterboxdAPI.shared.getMemberWatchlist(withId: "id") { result in
 }
 ```
 
+### Run a query for any endpoint
+``` swift
+struct List: Decodable {
+    var id: String
+    var name: String
+}
+
+LetterboxdAPI.shared.query(path: "/list/coMSs", parameters: [:]) { (result: Result<List, Error>) in
+    switch result {
+    case .success(let list):
+        // list is of type List, declared a few lines above
+        print(list.id)
+        
+    case .failure(let error):
+        // error may be of type LetterboxdAPIError
+        print(error)
+    }
+}
+```
+
 ## Contributing
 
 - If you need help or you'd like to ask a general question, open an issue.
