@@ -71,4 +71,18 @@ public class LetterboxdAPI {
         task.resume()
         return task
     }
+    
+    @discardableResult
+    internal func processRequest(request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) -> URLSessionTask {
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard error == nil, let data = data else {
+                completion(.failure(error!))
+                return
+            }
+            
+            completion(.success(data))
+        }
+        task.resume()
+        return task
+    }
 }
