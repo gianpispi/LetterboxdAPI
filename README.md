@@ -171,4 +171,4 @@ LetterboxdAPI.shared.query(path: "/list/coMSs", parameters: [:]) { (result: Resu
 
 
 ## Author
-gianpispi
+[gianpispi](https://github.com/gianpispi)
