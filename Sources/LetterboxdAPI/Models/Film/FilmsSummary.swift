@@ -14,6 +14,6 @@ public struct FilmSummary: Decodable {
     public var directors: [ContributorSummary]?
     public var poster: Image
     public var adultPoster: Image?
-    
+
     public var links: [Link]
 }
