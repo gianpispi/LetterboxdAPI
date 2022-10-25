@@ -1,6 +1,6 @@
 //
 //  Image.swift
-//  
+//
 //
 //  Created by Gianpiero Spinelli.
 //

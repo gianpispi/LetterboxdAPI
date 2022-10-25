@@ -20,7 +20,7 @@ public struct LetterboxdObject: Codable {
         case comment = "Comment"
         case contributor = "Contributor"
     }
-    
+
     public var type: LetterboxdType
     public var lid: LID
 }

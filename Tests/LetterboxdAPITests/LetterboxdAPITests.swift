@@ -1,5 +1,5 @@
-import XCTest
 @testable import LetterboxdAPI
+import XCTest
 
 final class LetterboxdAPITests: XCTestCase {
     func testAPIKeysSetup() {
