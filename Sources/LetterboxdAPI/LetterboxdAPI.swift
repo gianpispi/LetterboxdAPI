@@ -45,6 +45,14 @@ public class LetterboxdAPI {
         task.resume()
     }
     
+    public func getLID(for url: URL) async throws -> LetterboxdObject {
+        return try await withCheckedThrowingContinuation { continuation in
+            getLID(for: url) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+    
     internal func generateRequest(url: URL, method: HTTPMethod) -> URLRequest? {
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
@@ -54,22 +62,20 @@ public class LetterboxdAPI {
     
     @discardableResult
     internal func processRequest<R: Decodable>(request: URLRequest, completion: @escaping (Result<R, Error>) -> Void) -> URLSessionTask {
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard error == nil, let data = data else {
-                completion(.failure(error!))
-                return
-            }
-            
-            do {
-                let result = try JSONDecoder().decode(R.self, from: data) as R
-                completion(.success(result))
-            } catch {
-                print(error)
+        processRequest(request: request) { result in
+            switch result {
+            case .success(let data):
+                do {
+                    let obj = try JSONDecoder().decode(R.self, from: data) as R
+                    completion(.success(obj))
+                } catch {
+                    print(error)
+                    completion(.failure(error))
+                }
+            case .failure(let error):
                 completion(.failure(error))
             }
         }
-        task.resume()
-        return task
     }
     
     @discardableResult

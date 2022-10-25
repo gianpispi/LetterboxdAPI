@@ -62,6 +62,11 @@ LetterboxdAPI.shared.getLID(for: url) { result in
 }
 ```
 
+**async/await**
+``` swift
+let lObj: LetterboxdObject? = try? await LetterboxdAPI.shared.getLID(for: url)
+```
+
 ### Get a film providing the film ID
 Just provide the film id, and get the response right away.
 ``` swift
@@ -76,6 +81,11 @@ LetterboxdAPI.shared.getFilm(withId: "id") { result in
         print(error)
     }
 }
+```
+
+**async/await**
+``` swift
+let film: Film? = try? await LetterboxdAPI.shared.getFilm(withId: "id")
 ```
 
 ### Get a film providing the film ID
@@ -94,6 +104,11 @@ LetterboxdAPI.shared.getFilmAvailability(withId: "id") { result in
 }
 ```
 
+**async/await**
+``` swift
+let filmAvailability: FilmAvailabilityResponse? = try? await LetterboxdAPI.shared.getFilmAvailability(withId: "id")
+```
+
 ### Get a member providing the member's ID
 ``` swift
 LetterboxdAPI.shared.getMember(withId: "id") { result in
@@ -107,6 +122,11 @@ LetterboxdAPI.shared.getMember(withId: "id") { result in
         print(error)
     }
 }
+```
+
+**async/await**
+``` swift
+let member: Member? = try? await LetterboxdAPI.shared.getMember(withId: "id")
 ```
 
 ### Get a member's statistics providing the member's ID
@@ -123,6 +143,12 @@ LetterboxdAPI.shared.getMemberStatistics(withId: "id") { result in
     }
 }
 ```
+
+**async/await**
+``` swift
+let statistics: MemberStatistics? = try? await LetterboxdAPI.shared.getMemberStatistics(withId: "id")
+```
+
 ### Get a member's watchlist providing the member's ID
 ``` swift
 LetterboxdAPI.shared.getMemberWatchlist(withId: "id") { result in
@@ -136,6 +162,11 @@ LetterboxdAPI.shared.getMemberWatchlist(withId: "id") { result in
         print(error)
     }
 }
+```
+
+**async/await**
+``` swift
+let watchlist: FilmResponse? = try? await LetterboxdAPI.shared.getMemberWatchlist(withId: "id")
 ```
 
 ### Run a query for any endpoint
@@ -157,6 +188,16 @@ LetterboxdAPI.shared.query(path: "/list/coMSs", parameters: [:]) { (result: Resu
     }
 }
 ```
+
+**async/await**
+``` swift
+do {
+    let list: List = try await LetterboxdAPI.shared.query(path: "/list/coMSs", parameters: [:])
+} catch {
+    print(error)
+}
+```
+
 
 ## Contributing
 

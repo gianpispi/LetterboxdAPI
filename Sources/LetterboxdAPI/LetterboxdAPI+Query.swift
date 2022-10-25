@@ -24,6 +24,16 @@ public extension LetterboxdAPI {
     ///   - parameters: the parameters for the endpoint
     ///   - body: if the endpoint supports a body, please insert use it here
     ///   - completion: the completion of the request
+    func query<D: Decodable>(path: String, parameters: [String: String], body: String? = nil) async throws -> D {
+        try await query(path: path, parameters: parameters, body: body?.data(using: .utf8))
+    }
+    
+    /// Generic query for any endpoint on the letterboxd APIs
+    /// - Parameters:
+    ///   - path: the endpoint, eg: `/film/id`
+    ///   - parameters: the parameters for the endpoint
+    ///   - body: if the endpoint supports a body, please insert use it here
+    ///   - completion: the completion of the request
     func query<D: Decodable>(path: String, parameters: [String: String], body: Data? = nil, completion: @escaping (Result<D, Error>) -> Void) {
         let url = URLBuilder.url(path: path, body: body, params: parameters)
         
@@ -33,5 +43,19 @@ public extension LetterboxdAPI {
         }
         
         processRequest(request: request, completion: completion)
+    }
+    
+    /// Generic query for any endpoint on the letterboxd APIs
+    /// - Parameters:
+    ///   - path: the endpoint, eg: `/film/id`
+    ///   - parameters: the parameters for the endpoint
+    ///   - body: if the endpoint supports a body, please insert use it here
+    ///   - completion: the completion of the request
+    func query<D: Decodable>(path: String, parameters: [String: String], body: Data? = nil) async throws -> D {
+        return try await withCheckedThrowingContinuation { continuation in
+            query(path: path, parameters: parameters, body: body) { result in
+                continuation.resume(with: result)
+            }
+        }
     }
 }
