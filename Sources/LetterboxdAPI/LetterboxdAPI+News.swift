@@ -15,7 +15,7 @@ public extension LetterboxdAPI {
         if let perPage = perPage {
             params["perPage"] = "\(perPage)"
         }
-        
+
         let url = URLBuilder.url(path: "/news", body: nil, params: params)
 
         guard let request = generateRequest(url: url, method: .get) else {

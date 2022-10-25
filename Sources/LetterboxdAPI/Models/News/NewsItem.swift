@@ -22,10 +22,10 @@ public struct NewsItem: Decodable {
 
     /// A long description of the news item in LBML. May contain the following HTML tags: <br> <strong> <em> <b> <i> <a href=""> <blockquote>.
     public var longDescription: String
-    
+
     /// The podcast episode number, if this news item is for a podcast
     public var episode: Int?
-    
+
     /// The podcast season number, if this news item is for a podcast
     public var season: Int?
 }
