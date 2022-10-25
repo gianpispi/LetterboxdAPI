@@ -1,4 +1,5 @@
 # LetterboxdAPI
+Now with async/await support.
 
 ## Required
 - Swift 5.3
