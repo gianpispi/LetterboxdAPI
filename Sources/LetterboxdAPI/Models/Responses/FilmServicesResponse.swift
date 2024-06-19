@@ -8,5 +8,5 @@
 import Foundation
 
 public struct FilmServicesResponse: Decodable {
-    var items: [Service]
+  var items: [Service]
 }

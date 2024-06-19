@@ -8,5 +8,5 @@
 import Foundation
 
 public struct CountryResponse: Decodable {
-    var items: [Country]
+  var items: [Country]
 }

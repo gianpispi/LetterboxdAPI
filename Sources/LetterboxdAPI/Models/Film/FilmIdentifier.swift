@@ -8,5 +8,5 @@
 import Foundation
 
 public struct FilmIdentifier: Decodable {
-    public var id: String
+  public var id: String
 }

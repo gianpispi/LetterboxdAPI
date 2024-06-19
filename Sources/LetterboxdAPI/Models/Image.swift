@@ -8,5 +8,5 @@
 import Foundation
 
 public struct Image: Decodable {
-    public var sizes: [ImageSize]
+  public var sizes: [ImageSize]
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-internal enum Private {
-    static var publicAPIKey: String = ""
-    static var privateAPIKey: String = ""
+enum Private {
+  static var publicAPIKey: String = ""
+  static var privateAPIKey: String = ""
 }

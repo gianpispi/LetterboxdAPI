@@ -8,5 +8,5 @@
 import Foundation
 
 public struct News: Decodable {
-    public var items: [NewsItem]
+  public var items: [NewsItem]
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 public struct Link: Decodable {
-    public var type: String
-    public var id: String
-    public var url: String
+  public var type: String
+  public var id: String
+  public var url: String
 }
