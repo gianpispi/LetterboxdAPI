@@ -26,7 +26,7 @@ public class LetterboxdAPI {
   }
 
   public func getLID(for url: URL) async throws -> LetterboxdObject {
-    let request = generateRequest(url: url, method: .head)
+    let request = url.generateRequest(withMethod: .head)
 
     let (_, response) = try await URLSession.shared.data(for: request)
     guard let response = response as? HTTPURLResponse,
@@ -38,13 +38,6 @@ public class LetterboxdAPI {
     }
 
     return LetterboxdObject(type: type, lid: id)
-  }
-
-  func generateRequest(url: URL, method: HTTPMethod) -> URLRequest {
-    var request = URLRequest(url: url)
-    request.httpMethod = method.rawValue
-    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    return request
   }
 
   func processRequest<R: Decodable>(request: URLRequest) async throws -> R {

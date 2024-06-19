@@ -25,8 +25,11 @@ public extension LetterboxdAPI {
   ///   - body: if the endpoint supports a body, please insert use it here
   ///   - completion: the completion of the request
   func query<D: Decodable>(path: String, parameters: [String: String], body: Data? = nil) async throws -> D {
-    let url = URLBuilder.url(path: path, body: body, params: parameters)
-    let request = generateRequest(url: url, method: .get)
+    let request = Path(path)
+      .appendBody(body)
+      .appendParams(parameters)
+      .url()
+      .generateRequest(withMethod: .get)
 
     return try await processRequest(request: request)
   }
