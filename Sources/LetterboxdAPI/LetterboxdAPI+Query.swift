@@ -28,7 +28,6 @@ public extension LetterboxdAPI {
     let request = Path(path)
       .appendBody(body)
       .appendParams(parameters)
-      .url()
       .generateRequest(withMethod: .get)
 
     return try await processRequest(request: request)
