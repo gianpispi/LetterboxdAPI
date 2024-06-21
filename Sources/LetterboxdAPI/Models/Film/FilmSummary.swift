@@ -1,5 +1,5 @@
 //
-//  FilmsSummary.swift
+//  FilmSummary.swift
 //  LetterboxdAPI
 //
 //  Created by Gianpiero Spinelli.

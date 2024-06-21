@@ -149,6 +149,6 @@ public struct FilmAvailability: Decodable {
 
   /// The types of the availability, possible options included buy, rent and stream
   public var types: [String]
-  
+
   public var serviceCode: String?
 }

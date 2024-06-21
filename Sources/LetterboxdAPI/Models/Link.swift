@@ -21,7 +21,7 @@ public struct Link: Decodable {
     case tickets
     case tiktok
   }
-  
+
   public var type: LinkType
   public var id: String
   public var url: String

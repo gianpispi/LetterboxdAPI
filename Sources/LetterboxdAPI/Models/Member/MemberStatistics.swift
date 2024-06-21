@@ -35,5 +35,4 @@ public struct MemberStatisticsCounts: Decodable {
   public var following: Int
   public var listTags: Int
   public var filmTags: Int
-
 }
