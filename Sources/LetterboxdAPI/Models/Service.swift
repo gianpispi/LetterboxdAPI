@@ -15,5 +15,5 @@ public struct Service: Decodable {
   public var name: String
 
   /// The URL of the thumbnail image for the service.
-  public var icon: String
+  public var icon: String?
 }

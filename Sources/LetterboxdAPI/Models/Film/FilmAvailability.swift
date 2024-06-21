@@ -136,7 +136,7 @@ public struct FilmAvailability: Decodable {
   public var displayName: String
 
   /// The URL of the thumbnail image for the service.
-  public var icon: String
+  public var icon: String?
 
   /// The regional store for the service. Not all countries are supported on all services.
   public var country: Country
@@ -149,4 +149,6 @@ public struct FilmAvailability: Decodable {
 
   /// The types of the availability, possible options included buy, rent and stream
   public var types: [String]
+  
+  public var serviceCode: String?
 }

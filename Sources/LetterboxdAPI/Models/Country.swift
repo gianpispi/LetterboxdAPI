@@ -13,4 +13,6 @@ public struct Country: Decodable {
 
   /// The name of the country.
   public var name: String
+  
+  public var flagUrl: String?
 }

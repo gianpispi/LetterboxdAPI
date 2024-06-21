@@ -12,4 +12,5 @@ public struct ContributorSummary: Decodable {
   public var name: String
   public var characterName: String?
   public var tmdbid: String?
+  public var customPoster: Image?
 }
