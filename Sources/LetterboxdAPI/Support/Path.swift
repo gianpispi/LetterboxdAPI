@@ -35,7 +35,7 @@ struct Path {
     return newPath
   }
 
-  func generateRequest(withMethod method: HTTPMethod) -> URLRequest {
+  func generateRequest(withMethod method: HTTPMethod, accessToken: AccessToken? = nil) -> URLRequest {
     let url = URLBuilder.url(path: path, params: parameters)
     var request = URLRequest(url: url)
     request.httpMethod = method.rawValue
@@ -49,7 +49,7 @@ struct Path {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
 
-    if let accessToken = AccessTokenManager.shared.accessToken {
+    if let accessToken {
       request.setValue("\(accessToken.tokenType) \(accessToken.accessToken)", forHTTPHeaderField: "Authorization")
     }
 

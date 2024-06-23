@@ -20,9 +20,15 @@ public class LetterboxdAPI {
 
   private init() {}
 
-  public static func setUpAPIKeys(publicAPI key: String, privateAPI privateKey: String) {
+  public static func setup(publicAPI key: String, privateAPI privateKey: String) async {
     Private.publicAPIKey = key
     Private.privateAPIKey = privateKey
+
+    do {
+      _ = try await AccessTokenManager.shared.getToken()
+    } catch {
+      print("Failed to fetch token: \(error)")
+    }
   }
 
   public func getLID(for url: URL) async throws -> LetterboxdObject {

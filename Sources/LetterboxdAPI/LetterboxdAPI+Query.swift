@@ -25,10 +25,11 @@ public extension LetterboxdAPI {
   ///   - body: if the endpoint supports a body, please insert use it here
   ///   - completion: the completion of the request
   func query<D: Decodable>(path: String, parameters: [String: String], body: Data? = nil) async throws -> D {
+    let accessToken = try await AccessTokenManager.shared.getToken()
     let request = Path(path)
       .appendBody(body)
       .appendParams(parameters)
-      .generateRequest(withMethod: .get)
+      .generateRequest(withMethod: .get, accessToken: accessToken)
 
     return try await processRequest(request: request)
   }

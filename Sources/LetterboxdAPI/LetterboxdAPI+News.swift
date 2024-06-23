@@ -16,9 +16,10 @@ public extension LetterboxdAPI {
       parameters["perPage"] = "\(perPage)"
     }
 
+    let accessToken = try await AccessTokenManager.shared.getToken()
     let request = Path("/news")
       .appendParams(parameters)
-      .generateRequest(withMethod: .get)
+      .generateRequest(withMethod: .get, accessToken: accessToken)
 
     return try await processRequest(request: request)
   }
