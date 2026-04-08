@@ -7,6 +7,6 @@
 
 import Foundation
 
-public struct News: Decodable {
-  public var items: [NewsItem]
+public struct News: Decodable, Sendable, Hashable {
+  public let items: [NewsItem]
 }

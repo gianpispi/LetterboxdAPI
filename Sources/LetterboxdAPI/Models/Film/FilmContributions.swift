@@ -7,9 +7,9 @@
 
 import Foundation
 
-public struct FilmContributions: Decodable {
-  public var type: String
+public struct FilmContributions: Decodable, Sendable, Hashable {
+  public let type: String
 
   /// The list of contributors of the specified type for the film.
-  public var contributors: [ContributorSummary]
+  public let contributors: [ContributorSummary]
 }

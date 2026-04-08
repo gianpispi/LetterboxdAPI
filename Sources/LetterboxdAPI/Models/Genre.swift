@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Genre: Decodable {
+public struct Genre: Decodable, Sendable, Hashable {
   /// The LID of the genre.
   public var id: String
 

@@ -7,10 +7,10 @@
 
 import Foundation
 
-public struct FilmTrailer: Decodable {
+public struct FilmTrailer: Decodable, Sendable, Hashable {
   /// The YouTube ID of the trailer.
-  public var id: String
+  public let id: String
 
   /// The YouTube URL for the trailer.
-  public var url: String
+  public let url: URL
 }

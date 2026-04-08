@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Service: Decodable {
+public struct Service: Decodable, Sendable, Hashable {
   /// The LID of the service.
   public var id: String
 
@@ -15,5 +15,11 @@ public struct Service: Decodable {
   public var name: String
 
   /// The URL of the thumbnail image for the service.
-  public var icon: String?
+  public let iconURL: URL?
+
+  enum CodingKeys: String, CodingKey {
+    case id
+    case name
+    case iconURL = "icon"
+  }
 }

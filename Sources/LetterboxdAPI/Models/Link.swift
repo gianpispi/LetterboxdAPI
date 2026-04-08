@@ -7,8 +7,8 @@
 
 import Foundation
 
-public struct Link: Decodable {
-  public enum LinkType: String, Decodable {
+public struct Link: Decodable, Sendable, Hashable {
+  public enum LinkType: String, Decodable, Sendable, Hashable {
     case letterboxd
     case boxd
     case tmdb
@@ -22,8 +22,8 @@ public struct Link: Decodable {
     case tiktok
   }
 
-  public var type: LinkType
-  public var id: String
-  public var url: String
-  public var label: String?
+  public let type: LinkType
+  public let id: String
+  public let url: URL
+  public let label: String?
 }

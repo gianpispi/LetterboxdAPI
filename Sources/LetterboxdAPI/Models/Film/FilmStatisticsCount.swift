@@ -7,11 +7,11 @@
 
 import Foundation
 
-public struct FilmStatisticsCounts: Decodable {
-  public var watches: Int
-  public var likes: Int
-  public var ratings: Int
-  public var fans: Int
-  public var lists: Int
-  public var reviews: Int
+public struct FilmStatisticsCounts: Decodable, Sendable, Hashable {
+  public let watches: Int
+  public let likes: Int
+  public let ratings: Int
+  public let fans: Int
+  public let lists: Int
+  public let reviews: Int
 }

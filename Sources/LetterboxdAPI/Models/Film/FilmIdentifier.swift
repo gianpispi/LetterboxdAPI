@@ -7,6 +7,6 @@
 
 import Foundation
 
-public struct FilmIdentifier: Decodable {
-  public var id: String
+public struct FilmIdentifier: Decodable, Sendable, Hashable {
+  public let id: String
 }

@@ -7,10 +7,18 @@
 
 import Foundation
 
-public struct ContributorSummary: Decodable {
-  public var id: String
-  public var name: String
-  public var characterName: String?
-  public var tmdbid: String?
-  public var customPoster: Image?
+public struct ContributorSummary: Decodable, Sendable, Hashable {
+  public let id: String
+  public let name: String
+  public let characterName: String?
+  public let tmdbID: String?
+  public let customPoster: Image?
+
+  enum CodingKeys: String, CodingKey {
+    case id
+    case name
+    case characterName
+    case tmdbID = "tmdbid"
+    case customPoster
+  }
 }

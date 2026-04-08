@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Language: Decodable {
+public struct Language: Decodable, Sendable, Hashable {
   /// The ISO 639-1 defined code of the language.
   public var code: String
 

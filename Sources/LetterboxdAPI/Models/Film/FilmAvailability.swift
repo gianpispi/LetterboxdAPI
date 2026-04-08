@@ -7,8 +7,8 @@
 
 import Foundation
 
-public struct FilmAvailability: Decodable {
-  public enum Country: String, Decodable {
+public struct FilmAvailability: Decodable, Sendable, Hashable {
+  public enum Country: String, Decodable, Sendable, Hashable {
     case AIA
     case ARE
     case ARG
@@ -133,22 +133,32 @@ public struct FilmAvailability: Decodable {
   }
 
   /// The name of the service.
-  public var displayName: String
+  public let displayName: String
 
   /// The URL of the thumbnail image for the service.
-  public var icon: String?
+  public let iconURL: URL?
 
   /// The regional store for the service. Not all countries are supported on all services.
-  public var country: Country
+  public let country: Country
 
   /// The unique ID (if any) for the film on this service.
-  public var id: String?
+  public let id: String?
 
   /// The URL for the film on this service.
-  public var url: String
+  public let url: URL
 
   /// The types of the availability, possible options included buy, rent and stream
-  public var types: [String]
+  public let types: [String]
 
-  public var serviceCode: String?
+  public let serviceCode: String?
+
+  enum CodingKeys: String, CodingKey {
+    case displayName
+    case iconURL = "icon"
+    case country
+    case id
+    case url
+    case types
+    case serviceCode
+  }
 }

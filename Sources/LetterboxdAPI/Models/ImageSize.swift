@@ -7,12 +7,8 @@
 
 import Foundation
 
-public struct ImageSize: Decodable {
-  public var width: Int
-  public var height: Int
-  public var url: String
-
-  func getURL() -> URL {
-    return URL(string: url)!
-  }
+public struct ImageSize: Decodable, Sendable, Hashable {
+  public let width: Int
+  public let height: Int
+  public let url: URL
 }

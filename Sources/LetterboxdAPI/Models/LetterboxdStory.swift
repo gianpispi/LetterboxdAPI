@@ -7,17 +7,32 @@
 
 import Foundation
 
-public struct LetterboxdStory: Decodable {
-  public var id: String
-  public var name: String
-  public var author: MemberSummary
-  public var url: String?
-  public var source: String?
-  public var videoUrl: String?
-  public var bodyHtml: String?
-  public var bodyLbml: String?
-  public var whenUpdated: String
-  public var whenCreated: String?
-  public var image: Image?
-  public var pinned: Bool
+public struct LetterboxdStory: Decodable, Sendable, Hashable {
+  public let id: String
+  public let name: String
+  public let author: MemberSummary
+  public let url: URL?
+  public let source: String?
+  public let videoURL: URL?
+  public let bodyHTML: String?
+  public let bodyLBML: String?
+  public let whenUpdated: String
+  public let whenCreated: String?
+  public let image: Image?
+  public let pinned: Bool
+
+  enum CodingKeys: String, CodingKey {
+    case id
+    case name
+    case author
+    case url
+    case source
+    case videoURL = "videoUrl"
+    case bodyHTML = "bodyHtml"
+    case bodyLBML = "bodyLbml"
+    case whenUpdated
+    case whenCreated
+    case image
+    case pinned
+  }
 }

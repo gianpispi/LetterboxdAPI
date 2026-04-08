@@ -10,8 +10,8 @@ import Foundation
 public typealias LID = String
 public typealias LetterboxdType = LetterboxdObject.LetterboxdType
 
-public struct LetterboxdObject: Codable {
-  public enum LetterboxdType: String, Codable {
+public struct LetterboxdObject: Codable, Sendable, Hashable {
+  public enum LetterboxdType: String, Codable, Sendable, Hashable {
     case film = "Film"
     case logEntry = "LogEntry"
     case member = "Member"
@@ -21,6 +21,6 @@ public struct LetterboxdObject: Codable {
     case contributor = "Contributor"
   }
 
-  public var type: LetterboxdType
-  public var lid: LID
+  public let type: LetterboxdType
+  public let lid: LID
 }

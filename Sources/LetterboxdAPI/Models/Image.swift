@@ -7,6 +7,6 @@
 
 import Foundation
 
-public struct Image: Decodable {
-  public var sizes: [ImageSize]
+public struct Image: Decodable, Sendable, Hashable {
+  public let sizes: [ImageSize]
 }

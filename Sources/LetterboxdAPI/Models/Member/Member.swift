@@ -7,18 +7,18 @@
 
 import Foundation
 
-public struct Member: Decodable {
-  public var id: String
-  public var username: String
-  public var givenName: String?
-  public var familyName: String?
-  public var displayName: String?
-  public var shortName: String?
-  public var avatar: Image?
+public struct Member: Decodable, Sendable, Hashable {
+  public let id: String
+  public let username: String
+  public let givenName: String?
+  public let familyName: String?
+  public let displayName: String?
+  public let shortName: String?
+  public let avatar: Image?
 
   /// Can be one of `Crew`, `Alum`, `Hq`, `Patron`, `Pro`, `Member`
-  public var memberStatus: String
-  public var hideAdsInContent: Bool
-  public var favoriteFilms: [Film]?
-  public var backdrop: Image?
+  public let memberStatus: String
+  public let hideAdsInContent: Bool
+  public let favoriteFilms: [Film]?
+  public let backdrop: Image?
 }
