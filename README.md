@@ -1,216 +1,129 @@
 # LetterboxdAPI
-Now with async/await support.
 
-## Required
-- Swift 5.3
-- iOS 13
-- tvOS 13
-- watchOS 6
-- macOS 10.15
+An async Swift package for the public Letterboxd API.
 
+## Highlights
+
+- Async/await-first API surface
+- Instance-based client design with dependency injection
+- Actor-backed access token caching and refresh coordination
+- Typed endpoint helpers plus a generic request API
+- Swift Testing coverage for auth, request building, errors, and header parsing
+
+## Requirements
+
+- Swift 6.0+
+- iOS 13+
+- macOS 10.15+
+- tvOS 13+
+- watchOS 6+
 
 ## Installation
 
-### Xcode
-Project > Swift Packages
+Add the package dependency to your `Package.swift`:
 
+```swift
+dependencies: [
+  .package(url: "https://github.com/gianpispi/LetterboxdAPI.git", from: "0.1.0"),
+]
 ```
-git@github.com:gianpispi/LetterboxdAPI.git
-```
 
-### Swift Package Manager
-You can install it via SPM in your `Package.swift`:
-
-``` swift
-import PackageDescription
-
-let package = Package(name: "YourPackage",
-    dependencies: [
-      .Package(url: "https://github.com/gianpispi/LetterboxdAPI", majorVersion: 0),
-    ]
-)
-```
-You must then use import SwiftLocation to use the core features.
-
+Then add `LetterboxdAPI` to your target dependencies.
 
 ## Usage
-``` swift
+
+### Create a client
+
+```swift
 import LetterboxdAPI
 
-// AppDelegate.swift file
-func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    // Override point for customization after application launch.
-    
-    LetterboxdAPI.setUpAPIKeys(publicAPI: "<<API Key>>", privateAPI: "<<API Secret>>")
-    
-    return true
-}
+let client = LetterboxdAPI(
+  credentials: .init(
+    clientID: "<public key>",
+    clientSecret: "<private key>"
+  )
+)
 ```
 
-### Get the LID (Letterboxd ID) and type for a Letterboxd URL (eg: boxd.it/<<ID>> or letterboxd.com/<<something>>)
-``` swift
-let url = URL(string: "https://letterboxd.com/film/free-guy/")!
-LetterboxdAPI.shared.getLID(for: url) { result in
-    switch result {
-    case .success(let obj):
-        // obj of type LetterboxdObject, which has the object LID and the  object type (LetterboxdType)
-        print(obj.lid)
-        
-    case .failure(let error):
-        // error is of type LetterboxdAPIError and is `wrongResponse`
-        print(error)
-    }
-}
+### Resolve a public Letterboxd URL
+
+```swift
+let object = try await client.resolveLetterboxdObject(
+  for: URL(string: "https://letterboxd.com/film/free-guy/")!
+)
+
+print(object.lid)
+print(object.type)
 ```
 
-**async/await**
-``` swift
-let lObj: LetterboxdObject? = try? await LetterboxdAPI.shared.getLID(for: url)
+### Fetch a film
+
+```swift
+let film = try await client.film(withID: "free-guy")
+print(film.name)
 ```
 
-### Get a film providing the film ID
-Just provide the film id, and get the response right away.
-``` swift
-LetterboxdAPI.shared.getFilm(withId: "id") { result in
-    switch result {
-    case .success(let film):
-        // film is of type Film
-        print(film.originalName)
-        
-    case .failure(let error):
-        // error may be of type LetterboxdAPIError
-        print(error)
-    }
-}
+### Fetch a member
+
+```swift
+let member = try await client.member(withID: "some-member-id")
+print(member.username)
 ```
 
-**async/await**
-``` swift
-let film: Film? = try? await LetterboxdAPI.shared.getFilm(withId: "id")
+### Fetch a member watchlist
+
+```swift
+let watchlist = try await client.memberWatchlist(
+  forMemberWithID: "some-member-id",
+  query: ["perPage": "20"]
+)
+
+print(watchlist.items.map(\.name))
 ```
 
-### Get a film providing the film ID
-Just provide the film id, and get the response right away.
-``` swift
-LetterboxdAPI.shared.getFilmAvailability(withId: "id") { result in
-    switch result {
-    case .success(let availability):
-        // availability is of type FilmAvailabilityResponse
-        print(film.items.map({ $0.displayName }))
-        
-    case .failure(let error):
-        // error may be of type LetterboxdAPIError
-        print(error)
-    }
-}
-```
+### Run a generic request
 
-**async/await**
-``` swift
-let filmAvailability: FilmAvailabilityResponse? = try? await LetterboxdAPI.shared.getFilmAvailability(withId: "id")
-```
-
-### Get a member providing the member's ID
-``` swift
-LetterboxdAPI.shared.getMember(withId: "id") { result in
-    switch result {
-    case .success(let member):
-        // member is of type Member
-        print(member.username)
-        
-    case .failure(let error):
-        // error may be of type LetterboxdAPIError
-        print(error)
-    }
-}
-```
-
-**async/await**
-``` swift
-let member: Member? = try? await LetterboxdAPI.shared.getMember(withId: "id")
-```
-
-### Get a member's statistics providing the member's ID
-``` swift
-LetterboxdAPI.shared.getMemberStatistics(withId: "id") { result in
-    switch result {
-    case .success(let statistics):
-        // statistics is of type MemberStatistics
-        print(statistics.counts.watches)
-        
-    case .failure(let error):
-        // error may be of type LetterboxdAPIError
-        print(error)
-    }
-}
-```
-
-**async/await**
-``` swift
-let statistics: MemberStatistics? = try? await LetterboxdAPI.shared.getMemberStatistics(withId: "id")
-```
-
-### Get a member's watchlist providing the member's ID
-``` swift
-LetterboxdAPI.shared.getMemberWatchlist(withId: "id") { result in
-    switch result {
-    case .success(let watchlist):
-        // watchlist is of type FilmResponse
-        print(watchlist.items.map({ $0.name }))
-        
-    case .failure(let error):
-        // error may be of type LetterboxdAPIError
-        print(error)
-    }
-}
-```
-
-**async/await**
-``` swift
-let watchlist: FilmResponse? = try? await LetterboxdAPI.shared.getMemberWatchlist(withId: "id")
-```
-
-### Run a query for any endpoint
-``` swift
+```swift
 struct List: Decodable {
-    var id: String
-    var name: String
+  let id: String
+  let name: String
 }
 
-LetterboxdAPI.shared.query(path: "/list/coMSs", parameters: [:]) { (result: Result<List, Error>) in
-    switch result {
-    case .success(let list):
-        // list is of type List, declared a few lines above
-        print(list.id)
-        
-    case .failure(let error):
-        // error may be of type LetterboxdAPIError
-        print(error)
-    }
-}
+let list: List = try await client.query(
+  path: "list/coMSs",
+  requiresAuthorization: true
+)
 ```
 
-**async/await**
-``` swift
+### Handle errors
+
+```swift
 do {
-    let list: List = try await LetterboxdAPI.shared.query(path: "/list/coMSs", parameters: [:])
+  let news = try await client.news(perPage: 10)
+  print(news.items.count)
+} catch LetterboxdAPIError.missingCredentials {
+  print("This endpoint requires API credentials.")
+} catch LetterboxdAPIError.unsuccessfulStatusCode(let statusCode, _) {
+  print("Request failed with status code \(statusCode)")
 } catch {
-    print(error)
+  print(error)
 }
 ```
 
+## Design Notes
 
-## Contributing
-
-- If you need help or you'd like to ask a general question, open an issue.
-- If you found a bug, open an issue.
-- If you have a feature request, open an issue.
-- If you want to contribute, submit a pull request.
-
+- The client is a value type, so you can create multiple isolated clients with different credentials or sessions.
+- Authenticated requests automatically fetch and reuse access tokens until they are close to expiry.
+- Networking is dependency-injected through `URLSession`, which keeps tests deterministic and lightweight.
 
 ## API Documentation
-[Letterboxd API](https://api-docs.letterboxd.com)
 
+- Letterboxd API docs: <https://api-docs.letterboxd.com>
 
-## Author
-[gianpispi](https://github.com/gianpispi)
+## Development
+
+Run the test suite with:
+
+```bash
+swift test
+```
