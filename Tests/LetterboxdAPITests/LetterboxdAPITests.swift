@@ -1,6 +1,6 @@
 import Foundation
-import Testing
 @testable import LetterboxdAPI
+import Testing
 
 @Suite(.serialized)
 struct LetterboxdAPITests {
@@ -118,7 +118,7 @@ struct LetterboxdAPITests {
       return (response, Data())
     }
 
-    let object = try await client.resolveLetterboxdObject(for: URL(string: "https://letterboxd.com/film/free-guy/")!)
+    let object = try await client.resolveLetterboxdObject(for: #require(URL(string: "https://letterboxd.com/film/free-guy/")))
     #expect(object.lid == "abc123")
     #expect(object.type == .film)
   }
@@ -186,7 +186,7 @@ private final class MockURLProtocol: URLProtocol {
     storage.setHandler(handler)
   }
 
-  override class func canInit(with request: URLRequest) -> Bool {
+  override class func canInit(with _: URLRequest) -> Bool {
     true
   }
 

@@ -66,7 +66,7 @@ actor AccessTokenManager {
       ],
       body: formBody
     )
-      .urlRequest(baseURL: LetterboxdAPI.baseURL)
+    .urlRequest(baseURL: LetterboxdAPI.baseURL)
 
     request.setValue("application/json", forHTTPHeaderField: "Accept")
 

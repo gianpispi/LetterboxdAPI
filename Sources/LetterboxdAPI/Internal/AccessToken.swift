@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct AccessToken: Decodable, Sendable {
+struct AccessToken: Decodable {
   let accessToken: String
   let tokenType: String
   let expiresAt: Date

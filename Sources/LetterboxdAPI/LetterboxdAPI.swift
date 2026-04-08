@@ -9,7 +9,7 @@ public struct LetterboxdAPI: Sendable {
   /// Creates a client for the Letterboxd API.
   /// - Parameters:
   ///   - credentials: The credentials used for authenticated endpoints.
-   ///   - session: The URL session used to execute requests.
+  ///   - session: The URL session used to execute requests.
   public init(
     credentials: LetterboxdAPICredentials? = nil,
     session: URLSession = .shared
