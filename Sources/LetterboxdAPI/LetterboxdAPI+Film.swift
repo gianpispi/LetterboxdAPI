@@ -1,83 +1,83 @@
-//
-//  LetterboxdAPI+Film.swift
-//  LetterboxdAPI
-//
-//  Created by Gianpiero Spinelli.
-//
-
 import Foundation
 
 public extension LetterboxdAPI {
-  /// A cursored window over the list of films.
-  func getFilms(parameters: [String: String] = [:]) async throws -> FilmResponse {
-    let accessToken = try await AccessTokenManager.shared.getToken()
-    let request = Path("/films")
-      .appendParams(parameters)
-      .generateRequest(withMethod: .get, accessToken: accessToken)
-
-    return try await processRequest(request: request)
+  /// Returns a paged list of films matching the supplied query parameters.
+  func films(matching query: [String: String] = [:]) async throws -> FilmsResponse {
+    try await request(path: "films", query: query)
   }
 
-  /// Get details about a film by ID.
+  /// Returns full details for a film.
+  func film(withID id: String) async throws -> Film {
+    try await request(path: "film/\(id)")
+  }
+
+  /// Returns the streaming and purchase availability for a film.
+  func filmAvailability(forFilmWithID id: String) async throws -> FilmAvailabilityResponse {
+    try await request(path: "film/\(id)/availability")
+  }
+
+  /// Returns aggregate statistics for a film.
+  func filmStatistics(forFilmWithID id: String) async throws -> FilmStatistics {
+    try await request(path: "film/\(id)/statistics")
+  }
+
+  /// Returns the countries supported by the films endpoint.
+  func countries() async throws -> CountriesResponse {
+    try await request(path: "films/countries")
+  }
+
+  /// Returns the services supported by the films endpoint.
+  func filmServices() async throws -> FilmServicesResponse {
+    try await request(path: "films/film-services")
+  }
+
+  /// Returns the genres supported by the films endpoint.
+  func filmGenres() async throws -> GenresResponse {
+    try await request(path: "films/genres")
+  }
+
+  /// Returns the languages supported by the films endpoint.
+  func filmLanguages() async throws -> LanguagesResponse {
+    try await request(path: "films/languages")
+  }
+
+  @available(*, deprecated, renamed: "films(matching:)")
+  func getFilms(parameters: [String: String] = [:]) async throws -> FilmsResponse {
+    try await films(matching: parameters)
+  }
+
+  @available(*, deprecated, renamed: "film(withID:)")
   func getFilm(withId id: String) async throws -> Film {
-    let accessToken = try await AccessTokenManager.shared.getToken()
-    let request = Path("/film/\(id)")
-      .generateRequest(withMethod: .get, accessToken: accessToken)
-
-    return try await processRequest(request: request)
+    try await film(withID: id)
   }
 
-  /// Get availability data for a film by ID. Only available to first-party API clients.
+  @available(*, deprecated, renamed: "filmAvailability(forFilmWithID:)")
   func getFilmAvailability(withId id: String) async throws -> FilmAvailabilityResponse {
-    let accessToken = try await AccessTokenManager.shared.getToken()
-    let request = Path("/film/\(id)/availability")
-      .generateRequest(withMethod: .get, accessToken: accessToken)
-
-    return try await processRequest(request: request)
+    try await filmAvailability(forFilmWithID: id)
   }
 
-  /// Get statistical data about a film by ID.
+  @available(*, deprecated, renamed: "filmStatistics(forFilmWithID:)")
   func getFilmStatistics(withId id: String) async throws -> FilmStatistics {
-    let accessToken = try await AccessTokenManager.shared.getToken()
-    let request = Path("/film/\(id)/statistics")
-      .generateRequest(withMethod: .get, accessToken: accessToken)
-
-    return try await processRequest(request: request)
+    try await filmStatistics(forFilmWithID: id)
   }
 
-  /// Get a list of countries supported by the /films endpoint
-  func getCountries() async throws -> CountryResponse {
-    let accessToken = try await AccessTokenManager.shared.getToken()
-    let request = Path("/films/countries")
-      .generateRequest(withMethod: .get, accessToken: accessToken)
-
-    return try await processRequest(request: request)
+  @available(*, deprecated, renamed: "countries()")
+  func getCountries() async throws -> CountriesResponse {
+    try await countries()
   }
 
-  /// Get a list of services supported by the /films endpoint.
+  @available(*, deprecated, renamed: "filmServices()")
   func getFilmServices() async throws -> FilmServicesResponse {
-    let accessToken = try await AccessTokenManager.shared.getToken()
-    let request = Path("/films/film-services")
-      .generateRequest(withMethod: .get, accessToken: accessToken)
-
-    return try await processRequest(request: request)
+    try await filmServices()
   }
 
-  /// Get a list of genres supported by the /films endpoint.
+  @available(*, deprecated, renamed: "filmGenres()")
   func getFilmGenres() async throws -> GenresResponse {
-    let accessToken = try await AccessTokenManager.shared.getToken()
-    let request = Path("/films/genres")
-      .generateRequest(withMethod: .get, accessToken: accessToken)
-
-    return try await processRequest(request: request)
+    try await filmGenres()
   }
 
-  /// Get a list of languages supported by the /films endpoint
+  @available(*, deprecated, renamed: "filmLanguages()")
   func getFilmLanguages() async throws -> LanguagesResponse {
-    let accessToken = try await AccessTokenManager.shared.getToken()
-    let request = Path("/films/languages")
-      .generateRequest(withMethod: .get, accessToken: accessToken)
-
-    return try await processRequest(request: request)
+    try await filmLanguages()
   }
 }

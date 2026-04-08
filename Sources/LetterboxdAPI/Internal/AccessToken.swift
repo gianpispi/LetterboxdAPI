@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct AccessToken: Decodable {
-  var accessToken: String
-  var tokenType: String
-  var expiresAt: Date
+struct AccessToken: Decodable, Sendable {
+  let accessToken: String
+  let tokenType: String
+  let expiresAt: Date
 
   enum CodingKeys: String, CodingKey {
     case accessToken = "access_token"
@@ -22,8 +22,11 @@ struct AccessToken: Decodable {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     accessToken = try container.decode(String.self, forKey: .accessToken)
     tokenType = try container.decode(String.self, forKey: .tokenType)
-    let expiresIn = try container.decode(Int.self, forKey: .expiresIn)
+    let expiresIn = try container.decode(TimeInterval.self, forKey: .expiresIn)
+    expiresAt = Date().addingTimeInterval(expiresIn)
+  }
 
-    expiresAt = Date().addingTimeInterval(TimeInterval(expiresIn))
+  func isValid(relativeTo date: Date = .init(), minimumValidity: TimeInterval = 60) -> Bool {
+    expiresAt > date.addingTimeInterval(minimumValidity)
   }
 }

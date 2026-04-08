@@ -1,36 +1,67 @@
-//
-//  LetterboxdAPI+Query.swift
-//  LetterboxdAPI
-//
-//  Created by Gianpiero Spinelli.
-//
-
 import Foundation
 
 public extension LetterboxdAPI {
-  /// Generic query for any endpoint on the letterboxd APIs
+  /// Executes a typed request against an arbitrary Letterboxd endpoint.
   /// - Parameters:
-  ///   - path: the endpoint, eg: `/film/id`
-  ///   - parameters: the parameters for the endpoint
-  ///   - body: if the endpoint supports a body, please insert use it here
-  ///   - completion: the completion of the request
-  func query<D: Decodable>(path: String, parameters: [String: String], body: String? = nil) async throws -> D {
-    try await query(path: path, parameters: parameters, body: body?.data(using: .utf8))
+  ///   - path: The endpoint path relative to the API base URL, for example `film/some-id`.
+  ///   - method: The HTTP method.
+  ///   - query: Query parameters for the request.
+  ///   - body: Optional request body.
+  ///   - headers: Additional request headers.
+  ///   - requiresAuthorization: Whether the endpoint requires authentication.
+  /// - Returns: The decoded response body.
+  func query<Response: Decodable>(
+    path: String,
+    method: HTTPMethod = .get,
+    query: [String: String] = [:],
+    body: Data? = nil,
+    headers: [String: String] = [:],
+    requiresAuthorization: Bool = true,
+    as responseType: Response.Type = Response.self
+  ) async throws -> Response {
+    try await request(
+      path: path,
+      method: method,
+      query: query,
+      body: body,
+      headers: headers,
+      requiresAuthorization: requiresAuthorization,
+      as: responseType
+    )
   }
 
-  /// Generic query for any endpoint on the letterboxd APIs
-  /// - Parameters:
-  ///   - path: the endpoint, eg: `/film/id`
-  ///   - parameters: the parameters for the endpoint
-  ///   - body: if the endpoint supports a body, please insert use it here
-  ///   - completion: the completion of the request
-  func query<D: Decodable>(path: String, parameters: [String: String], body: Data? = nil) async throws -> D {
-    let accessToken = try await AccessTokenManager.shared.getToken()
-    let request = Path(path)
-      .appendBody(body)
-      .appendParams(parameters)
-      .generateRequest(withMethod: .get, accessToken: accessToken)
+  /// Executes a typed request using a UTF-8 string request body.
+  func query<Response: Decodable>(
+    path: String,
+    method: HTTPMethod = .get,
+    query: [String: String] = [:],
+    body: String,
+    headers: [String: String] = [:],
+    requiresAuthorization: Bool = true,
+    as responseType: Response.Type = Response.self
+  ) async throws -> Response {
+    try await request(
+      path: path,
+      method: method,
+      query: query,
+      body: body,
+      headers: headers,
+      requiresAuthorization: requiresAuthorization,
+      as: responseType
+    )
+  }
 
-    return try await processRequest(request: request)
+  @available(*, deprecated, message: "Use query(path:method:query:body:headers:requiresAuthorization:as:) instead.")
+  func query<Response: Decodable>(path: String, parameters: [String: String], body: String? = nil) async throws -> Response {
+    if let body {
+      return try await query(path: path, query: parameters, body: body)
+    }
+
+    return try await query(path: path, query: parameters, as: Response.self)
+  }
+
+  @available(*, deprecated, message: "Use query(path:method:query:body:headers:requiresAuthorization:as:) instead.")
+  func query<Response: Decodable>(path: String, parameters: [String: String], body: Data? = nil) async throws -> Response {
+    try await query(path: path, query: parameters, body: body, as: Response.self)
   }
 }

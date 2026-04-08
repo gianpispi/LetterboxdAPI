@@ -1,26 +1,19 @@
-//
-//  LetterboxdAPI+News.swift
-//  LetterboxdAPI
-//
-//  Created by Gianpiero Spinelli.
-//
-
 import Foundation
 
 public extension LetterboxdAPI {
-  /// Get recent news from the Letterboxd editors.
-  /// `perPage` default is 20, max is 100.
-  func getNews(perPage: Int? = nil) async throws -> News {
-    var parameters: [String: String] = [:]
-    if let perPage = perPage {
-      parameters["perPage"] = "\(perPage)"
+  /// Returns recent editorial news.
+  /// - Parameter perPage: The page size. Letterboxd currently documents a default of 20 and a maximum of 100.
+  func news(perPage: Int? = nil) async throws -> News {
+    var query: [String: String] = [:]
+    if let perPage {
+      query["perPage"] = String(perPage)
     }
 
-    let accessToken = try await AccessTokenManager.shared.getToken()
-    let request = Path("/news")
-      .appendParams(parameters)
-      .generateRequest(withMethod: .get, accessToken: accessToken)
+    return try await request(path: "news", query: query)
+  }
 
-    return try await processRequest(request: request)
+  @available(*, deprecated, renamed: "news(perPage:)")
+  func getNews(perPage: Int? = nil) async throws -> News {
+    try await news(perPage: perPage)
   }
 }
