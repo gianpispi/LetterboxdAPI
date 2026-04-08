@@ -7,6 +7,6 @@
 
 import Foundation
 
-public struct FilmAvailabilityResponse: Decodable {
-  public var items: [FilmAvailability]
+public struct FilmAvailabilityResponse: Decodable, Sendable, Hashable {
+  public let items: [FilmAvailability]
 }

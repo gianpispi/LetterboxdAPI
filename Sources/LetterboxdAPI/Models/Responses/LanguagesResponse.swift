@@ -7,6 +7,6 @@
 
 import Foundation
 
-public struct GenresResponse: Decodable {
-  public var items: [Genre]
+public struct LanguagesResponse: Decodable, Sendable, Hashable {
+  public let items: [Language]
 }
