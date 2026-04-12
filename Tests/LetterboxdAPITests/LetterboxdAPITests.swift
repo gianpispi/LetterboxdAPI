@@ -88,7 +88,7 @@ struct LetterboxdAPITests {
     do {
       _ = try await client.film(withID: "1")
       Issue.record("Expected the request to throw.")
-    } catch let error as LetterboxdAPIError {
+    } catch let error {
       guard case let .unsuccessfulStatusCode(statusCode, body) = error else {
         Issue.record("Expected an unsuccessfulStatusCode error, got \(error).")
         return
@@ -130,7 +130,7 @@ struct LetterboxdAPITests {
     do {
       _ = try await client.film(withID: "1")
       Issue.record("Expected missing credentials error.")
-    } catch let error as LetterboxdAPIError {
+    } catch let error {
       guard case .missingCredentials = error else {
         Issue.record("Expected missingCredentials, got \(error).")
         return

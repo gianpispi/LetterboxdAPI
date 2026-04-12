@@ -2,6 +2,9 @@ import Foundation
 
 /// Errors thrown by ``LetterboxdAPI``.
 public enum LetterboxdAPIError: Error, Sendable {
+  /// The underlying transport request failed.
+  case transportFailed(Error)
+
   /// The request could not be built.
   case invalidRequest(String)
 

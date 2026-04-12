@@ -21,11 +21,17 @@ public struct LetterboxdAPI: Sendable {
   /// Resolves a Letterboxd URL into its object identifier and type.
   /// - Parameter url: The public Letterboxd URL to inspect.
   /// - Returns: The resolved object metadata.
-  public func resolveLetterboxdObject(for url: URL) async throws -> LetterboxdObject {
+  public func resolveLetterboxdObject(for url: URL) async throws(LetterboxdAPIError) -> LetterboxdObject {
     var request = URLRequest(url: url)
     request.httpMethod = HTTPMethod.head.rawValue
 
-    let (_, response) = try await session.data(for: request)
+    let response: URLResponse
+
+    do {
+      (_, response) = try await session.data(for: request)
+    } catch {
+      throw .transportFailed(error)
+    }
 
     guard let httpResponse = response as? HTTPURLResponse else {
       throw LetterboxdAPIError.invalidResponse
@@ -63,7 +69,7 @@ public struct LetterboxdAPI: Sendable {
     headers: [String: String] = [:],
     requiresAuthorization: Bool = true,
     as responseType: Response.Type = Response.self
-  ) async throws -> Response {
+  ) async throws(LetterboxdAPIError) -> Response {
     let apiRequest = APIRequest(
       path: path,
       method: method,
@@ -84,7 +90,7 @@ public struct LetterboxdAPI: Sendable {
     headers: [String: String] = [:],
     requiresAuthorization: Bool = true,
     as responseType: Response.Type = Response.self
-  ) async throws -> Response {
+  ) async throws(LetterboxdAPIError) -> Response {
     try await request(
       path: path,
       method: method,
@@ -96,7 +102,7 @@ public struct LetterboxdAPI: Sendable {
     )
   }
 
-  static func validate(response: URLResponse, data: Data) throws {
+  static func validate(response: URLResponse, data: Data) throws(LetterboxdAPIError) {
     guard let httpResponse = response as? HTTPURLResponse else {
       throw LetterboxdAPIError.invalidResponse
     }
@@ -106,7 +112,7 @@ public struct LetterboxdAPI: Sendable {
     }
   }
 
-  private func authorizationHeaderValue() async throws -> String {
+  private func authorizationHeaderValue() async throws(LetterboxdAPIError) -> String {
     guard let tokenManager else {
       throw LetterboxdAPIError.missingCredentials
     }
@@ -119,10 +125,17 @@ public struct LetterboxdAPI: Sendable {
     _ apiRequest: APIRequest,
     requiresAuthorization: Bool,
     as responseType: Response.Type
-  ) async throws -> Response {
+  ) async throws(LetterboxdAPIError) -> Response {
     let authorization = requiresAuthorization ? try await authorizationHeaderValue() : nil
     let request = try apiRequest.urlRequest(baseURL: Self.baseURL, authorization: authorization)
-    let (data, response) = try await session.data(for: request)
+    let data: Data
+    let response: URLResponse
+
+    do {
+      (data, response) = try await session.data(for: request)
+    } catch {
+      throw .transportFailed(error)
+    }
 
     try Self.validate(response: response, data: data)
 

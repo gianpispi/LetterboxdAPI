@@ -3,7 +3,7 @@ import Foundation
 public extension LetterboxdAPI {
   /// Returns recent editorial news.
   /// - Parameter perPage: The page size. Letterboxd currently documents a default of 20 and a maximum of 100.
-  func news(perPage: Int? = nil) async throws -> News {
+  func news(perPage: Int? = nil) async throws(LetterboxdAPIError) -> News {
     var query: [String: String] = [:]
     if let perPage {
       query["perPage"] = String(perPage)
@@ -13,7 +13,7 @@ public extension LetterboxdAPI {
   }
 
   @available(*, deprecated, renamed: "news(perPage:)")
-  func getNews(perPage: Int? = nil) async throws -> News {
+  func getNews(perPage: Int? = nil) async throws(LetterboxdAPIError) -> News {
     try await news(perPage: perPage)
   }
 }

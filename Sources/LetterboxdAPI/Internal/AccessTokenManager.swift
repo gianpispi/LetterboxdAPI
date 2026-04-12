@@ -18,13 +18,19 @@ actor AccessTokenManager {
     self.session = session
   }
 
-  func validToken() async throws -> AccessToken {
+  func validToken() async throws(LetterboxdAPIError) -> AccessToken {
     if let cachedToken, cachedToken.isValid() {
       return cachedToken
     }
 
     if let inFlightRefreshTask {
-      return try await inFlightRefreshTask.value
+      do {
+        return try await inFlightRefreshTask.value
+      } catch let error as LetterboxdAPIError {
+        throw error
+      } catch {
+        throw .transportFailed(error)
+      }
     }
 
     let refreshTask = Task { [credentials, session] in
@@ -38,16 +44,19 @@ actor AccessTokenManager {
       cachedToken = token
       inFlightRefreshTask = nil
       return token
-    } catch {
+    } catch let error as LetterboxdAPIError {
       inFlightRefreshTask = nil
       throw error
+    } catch {
+      inFlightRefreshTask = nil
+      throw .transportFailed(error)
     }
   }
 
   private static func fetchToken(
     credentials: LetterboxdAPICredentials,
     session: URLSession
-  ) async throws -> AccessToken {
+  ) async throws(LetterboxdAPIError) -> AccessToken {
     var components = URLComponents()
     components.queryItems = [
       URLQueryItem(name: "grant_type", value: "client_credentials"),
@@ -57,7 +66,7 @@ actor AccessTokenManager {
 
     let formBody = components.percentEncodedQuery?.data(using: String.Encoding.utf8)
 
-    var request = try APIRequest(
+    let request = try APIRequest(
       path: "auth/token",
       method: .post,
       headers: [
@@ -68,9 +77,15 @@ actor AccessTokenManager {
     )
     .urlRequest(baseURL: LetterboxdAPI.baseURL)
 
-    request.setValue("application/json", forHTTPHeaderField: "Accept")
+    let data: Data
+    let response: URLResponse
 
-    let (data, response) = try await session.data(for: request)
+    do {
+      (data, response) = try await session.data(for: request)
+    } catch {
+      throw .transportFailed(error)
+    }
+
     try LetterboxdAPI.validate(response: response, data: data)
 
     do {

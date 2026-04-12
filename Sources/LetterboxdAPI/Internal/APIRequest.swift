@@ -21,7 +21,7 @@ struct APIRequest {
     self.body = body
   }
 
-  func urlRequest(baseURL: URL, authorization: String? = nil) throws -> URLRequest {
+  func urlRequest(baseURL: URL, authorization: String? = nil) throws(LetterboxdAPIError) -> URLRequest {
     guard var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
       throw LetterboxdAPIError.invalidBaseURL(baseURL)
     }

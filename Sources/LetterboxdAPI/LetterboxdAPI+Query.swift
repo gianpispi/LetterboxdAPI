@@ -18,7 +18,7 @@ public extension LetterboxdAPI {
     headers: [String: String] = [:],
     requiresAuthorization: Bool = true,
     as responseType: Response.Type = Response.self
-  ) async throws -> Response {
+  ) async throws(LetterboxdAPIError) -> Response {
     try await request(
       path: path,
       method: method,
@@ -39,7 +39,7 @@ public extension LetterboxdAPI {
     headers: [String: String] = [:],
     requiresAuthorization: Bool = true,
     as responseType: Response.Type = Response.self
-  ) async throws -> Response {
+  ) async throws(LetterboxdAPIError) -> Response {
     try await request(
       path: path,
       method: method,
@@ -52,7 +52,7 @@ public extension LetterboxdAPI {
   }
 
   @available(*, deprecated, message: "Use query(path:method:query:body:headers:requiresAuthorization:as:) instead.")
-  func query<Response: Decodable>(path: String, parameters: [String: String], body: String? = nil) async throws -> Response {
+  func query<Response: Decodable>(path: String, parameters: [String: String], body: String? = nil) async throws(LetterboxdAPIError) -> Response {
     if let body {
       return try await query(path: path, query: parameters, body: body)
     }
@@ -61,7 +61,7 @@ public extension LetterboxdAPI {
   }
 
   @available(*, deprecated, message: "Use query(path:method:query:body:headers:requiresAuthorization:as:) instead.")
-  func query<Response: Decodable>(path: String, parameters: [String: String], body: Data? = nil) async throws -> Response {
+  func query<Response: Decodable>(path: String, parameters: [String: String], body: Data? = nil) async throws(LetterboxdAPIError) -> Response {
     try await query(path: path, query: parameters, body: body, as: Response.self)
   }
 }
