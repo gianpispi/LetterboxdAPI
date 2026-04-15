@@ -19,6 +19,6 @@ public struct Member: Decodable, Sendable, Hashable {
   /// Can be one of `Crew`, `Alum`, `Hq`, `Patron`, `Pro`, `Member`
   public let memberStatus: String
   public let hideAdsInContent: Bool
-  public let favoriteFilms: [Film]?
+  public let favoriteFilms: [FilmSummary]?
   public let backdrop: Image?
 }
