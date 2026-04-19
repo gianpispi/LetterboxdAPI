@@ -43,4 +43,3 @@ public struct LogEntry: Decodable, Sendable, Hashable {
   /// The vertical focal point of the backdrop image, if available.
   public let backdropFocalPoint: Float?
 }
-
