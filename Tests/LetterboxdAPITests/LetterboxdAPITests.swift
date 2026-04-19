@@ -137,6 +137,41 @@ struct LetterboxdAPITests {
       }
     }
   }
+
+  @Test
+  func logEntryEndpointDecodesTypedNestedSchemas() async throws {
+    let session = makeSession()
+    let client = LetterboxdAPI(
+      credentials: .init(clientID: "public", clientSecret: "secret"),
+      session: session
+    )
+
+    MockURLProtocol.setHandler { request in
+      switch request.url?.path {
+      case "/api/v0/auth/token":
+        return (.json(statusCode: 200, url: request.url!), Data(#"{"access_token":"token","token_type":"Bearer","expires_in":3600}"#.utf8))
+      case "/api/v0/log-entry/abc123":
+        return (
+          .json(statusCode: 200, url: request.url!),
+          Data(#"{"id":"abc123","name":"Watched on the big screen","owner":{"id":"member-1","username":"gian","displayName":"Gian","shortName":"Gian","memberStatus":"Member"},"film":{"id":"film-1","name":"Film","sortingName":"Film","adult":false,"links":[]},"diaryDetails":{"diaryDate":"2026-04-18","rewatch":false},"review":{"lbml":"Great <strong>movie</strong>","containsSpoilers":false,"spoilersLocked":false,"moderated":false,"whenReviewed":"2026-04-19T10:15:00Z","text":"<p>Great movie</p>"},"tags2":[{"code":"favorites","displayTag":"favorites"}],"whenCreated":"2026-04-19T10:00:00Z","whenUpdated":"2026-04-19T10:30:00Z","rating":4.5,"like":true,"commentable":true,"links":[]}"#.utf8)
+        )
+      default:
+        throw URLError(.badURL)
+      }
+    }
+
+    let entry = try await client.logEntry(withID: "abc123")
+
+    #expect(entry.id == "abc123")
+    #expect(entry.name == "Watched on the big screen")
+    #expect(entry.review?.lbml == "Great <strong>movie</strong>")
+    #expect(entry.review?.containsSpoilers == false)
+    #expect(entry.review?.text == "<p>Great movie</p>")
+    #expect(entry.diaryDetails?.diaryDate == "2026-04-18")
+    #expect(entry.diaryDetails?.rewatch == false)
+    #expect(entry.tags2.count == 1)
+    #expect(entry.tags2.first?.code == "favorites")
+  }
 }
 
 private func makeSession() -> URLSession {
