@@ -70,6 +70,13 @@ let member = try await client.member(withID: "some-member-id")
 print(member.username)
 ```
 
+### Fetch a log entry
+
+```swift
+let entry = try await client.logEntry(withID: "some-log-entry-id")
+print(entry.name)
+```
+
 ### Fetch a member watchlist
 
 ```swift
